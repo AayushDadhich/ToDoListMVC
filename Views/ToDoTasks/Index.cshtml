@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ToDoList.Models.ToDoTask>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div id="tableDiv"></div>
+@if (!Model.Any())
+{
+    <center>
+        @Html.Label("No Tasks Added Yet")
+    </center>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.Label("Due Date")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (!item.IsCompleted)
+                    {
+                        @Html.DisplayFor(modelItem => item.Description)
+                    }
+                    else
+                    {
+                        <div class="CompletedTask">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </div>
+                    }
+                </td>
+
+                <td>
+                    <div>@item.DueDate.ToShortDateString()</div>
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@Html.ActionLink("Add Task", "Create", "ToDoTasks", null, new { @class = "btn btn-primary" })
+
+@section Scripts
+    {
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    @*Validates jquery elements for example maz size for textbox on client side*@
+    @Scripts.Render("~/bundles/jqueryval")
+}
